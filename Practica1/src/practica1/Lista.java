@@ -24,15 +24,17 @@ public class Lista {
         if(inicio == null){
             inicio = new Nodo(nombre, edad, complexion, personalidad, sexo, null, null);
             fin = inicio;
+            System.out.println("Se han añadido los datos :D");
         }else{
             Nodo nuevo = new Nodo(nombre, edad, complexion, personalidad, sexo, null, inicio);
             inicio.SetAnterior(nuevo);
             inicio = nuevo;
+            System.out.println("Se han añadido los datos :D");
         }
       
     }
     public String obtenerInicio(){
-        String dato = inicio.getNombre();
+        String dato = inicio.getSexo();
         inicio = inicio.getSiguiente();
         if(inicio!=null){
             inicio.SetAnterior(null);            

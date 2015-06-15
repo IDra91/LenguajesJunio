@@ -4,14 +4,18 @@
  * and open the template in the editor.
  */
 package practica1;
+import java.io.File;
 import javax.swing.JOptionPane;
+import javax.swing.*;
 /**
  *
  * @author Manuel
  */
 public class Principal extends javax.swing.JFrame {
 
-    
+    JFileChooser seleccionado = new JFileChooser();
+    File archivo;
+    GestionA gestion = new GestionA();
     
     /**
      * Creates new form Principal
@@ -34,7 +38,16 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TextoAnalizar = new javax.swing.JTextArea();
         BotonAnalizar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        Imagen = new javax.swing.JLabel();
+        Nombre = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu2 = new javax.swing.JMenu();
+        Abrir = new javax.swing.JMenuItem();
+        Guardar = new javax.swing.JMenuItem();
+        GuardarComo = new javax.swing.JMenuItem();
+        Salir = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        AcercaDe = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -53,6 +66,51 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jMenu2.setText("Archivos");
+
+        Abrir.setText("Abrir");
+        Abrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AbrirActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Abrir);
+
+        Guardar.setText("Guardar");
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Guardar);
+
+        GuardarComo.setText("Guardar como");
+        jMenu2.add(GuardarComo);
+
+        Salir.setText("Salir");
+        Salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Salir);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Ayuda");
+
+        AcercaDe.setText("Acerca de");
+        AcercaDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AcercaDeActionPerformed(evt);
+            }
+        });
+        jMenu3.add(AcercaDe);
+
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -62,26 +120,33 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Imagen, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(57, 57, 57)
                         .addComponent(BotonAnalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BotonAnalizar)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Imagen, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BotonAnalizar)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
-        jLabel1.getAccessibleContext().setAccessibleName("LblSalida");
+        Imagen.getAccessibleContext().setAccessibleName("LblSalida");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -90,8 +155,45 @@ public class Principal extends javax.swing.JFrame {
         Analizador a = new Analizador();
         cadena = TextoAnalizar.getText();
         a.AnalizadorGeneral(cadena);
+        Lista l = new Lista();
+        
         
     }//GEN-LAST:event_BotonAnalizarActionPerformed
+
+    private void AcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcercaDeActionPerformed
+        JOptionPane.showMessageDialog(null, "Este programa fue hecho por Manuel Rivera, 201212747 :D.");
+    }//GEN-LAST:event_AcercaDeActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_SalirActionPerformed
+
+    private void AbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirActionPerformed
+        if(seleccionado.showDialog(this, "Abrir archivo") == JFileChooser.APPROVE_OPTION){
+            archivo = seleccionado.getSelectedFile();
+            if(archivo.canRead()){
+                if(archivo.getName().endsWith("AVA")){
+                    String contenido = gestion.AbrirTexto(archivo);
+                    TextoAnalizar.setText(contenido);
+                }else{
+                    JOptionPane.showMessageDialog(null, "El archivo no es válido");
+                }
+            }
+        }
+    }//GEN-LAST:event_AbrirActionPerformed
+
+    private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
+        if(seleccionado.showDialog(this, "Guardar archivo") == JFileChooser.APPROVE_OPTION){
+            archivo = seleccionado.getSelectedFile();
+            if(archivo.getName().endsWith("AVA")){
+                String contenido = TextoAnalizar.getText();
+                String respuesta = gestion.GuardarTexto(archivo, contenido);
+                
+            } else{
+                    JOptionPane.showMessageDialog(null, "No se ha podido guardar el archivo, lo siento :C");
+            }
+        }
+    }//GEN-LAST:event_GuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,10 +231,19 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Abrir;
+    private javax.swing.JMenuItem AcercaDe;
     private javax.swing.JButton BotonAnalizar;
+    private javax.swing.JMenuItem Guardar;
+    private javax.swing.JMenuItem GuardarComo;
+    private javax.swing.JLabel Imagen;
+    private javax.swing.JLabel Nombre;
+    private javax.swing.JMenuItem Salir;
     private javax.swing.JTextArea TextoAnalizar;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
