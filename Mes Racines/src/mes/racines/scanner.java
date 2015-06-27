@@ -6,6 +6,7 @@
 package mes.racines;
 
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,7 +28,8 @@ public class scanner {
     int variables;
     int contador = 0;
     int link;
-    LinkedList token = new LinkedList ();
+    ListaToken lt = new ListaToken();
+    ListaPersona lp = new ListaPersona();
     public scanner(){
         
         
@@ -35,15 +37,66 @@ public class scanner {
     
     
     public void ScannerGeneral(String analisis){
-        
+        char caracter;
+        int estadoActual = 0;
+        boolean aceptacion = false;
+        while(!aceptacion){
+            caracter = cadena.charAt(contador);
+            switch(estadoActual){
+                case 0:
+                    if(Comienzo(cadena)){
+                        estadoActual = 1;
+                    } else{
+                        estadoActual = -1;
+                    } break;
+                case 1:
+                    if((Portada(cadena))||(Variables(cadena))||Arbol(cadena)){
+                        estadoActual = 2;
+                    } else{
+                        estadoActual = -1;
+                    } break;
+                case 2:
+                    if(Comienzo(cadena)){
+                        estadoActual = 3;
+                    } else{
+                        estadoActual = -1;
+                    } break;
+                case 3:
+                    if((Portada(cadena))||(Variables(cadena))||Arbol(cadena)){
+                        estadoActual = 4;
+                    } else{
+                        estadoActual = -1;
+                    } break;
+                case 4:
+                    if(Comienzo(cadena)){
+                        estadoActual = 5;
+                    } else{
+                        estadoActual = -1;
+                    } break;
+                case 5:
+                    if((Portada(cadena))||(Variables(cadena))||Arbol(cadena)){
+                        estadoActual = 6;
+                        contador --;
+                    } else{
+                        estadoActual = -1;
+                        contador --;
+                    } break;
+                case 6:
+                    aceptacion = true;
+                    JOptionPane.showMessageDialog(null, "Felicidades, la cadena es correcta y se han almacenado los datos correctamente :D.");
+            }
+        }
     }
     
     
     public boolean Portada(String analisis){
         String aux = "";
+        String port = "";
+        String xxx = "";
         char caracter;
         boolean aceptacion = false;
         int estadoActual = 0;
+        String dim = "";
         int flag, flag1, flag2, flag3, flag4 = 0;
         if(encabezado == 1){
             for(contador = contador; contador<cadena.length();contador++){
@@ -73,14 +126,24 @@ public class scanner {
                         } break;
                     case 2:
                         if((aux.toUpperCase().equals("Imagen"))||(aux.toUpperCase().equals("IMAGEN"))||(aux.toUpperCase().equals("imagen"))){
-                           estadoActual = 3; 
+                           lt.InsertarToken(aux, "Palabra reservada");
+                           aux = "";
+                            estadoActual = 3; 
                         } else if((aux.toUpperCase().equals("Texto"))||(aux.toUpperCase().equals("TEXTO"))||(aux.toUpperCase().equals("texto"))){
+                            lt.InsertarToken(aux, "Palabra reservada");
+                            aux = "";
                             estadoActual = 9;
                         } else if((aux.toUpperCase().equals("Negrita"))||(aux.toUpperCase().equals("NEGRITA"))||(aux.toUpperCase().equals("negrita"))){
+                            lt.InsertarToken(aux, "Palabra reservada");
+                            aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Cursiva"))||(aux.toUpperCase().equals("CURSIVA"))||(aux.toUpperCase().equals("cursiva"))){
+                            lt.InsertarToken(aux, "Palabra reservada");
+                            aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Subrayado"))||(aux.toUpperCase().equals("SUBRAYADO"))||(aux.toUpperCase().equals("subrayado"))){
+                            lt.InsertarToken(aux, "Palabra reservada");
+                            aux = "";
                             estadoActual = 14;
                         } break;
                     case 3:
@@ -104,14 +167,14 @@ public class scanner {
                     case 6:
                         if(caracterNumerico(caracter)){
                             estadoActual = 7;
-                            //Agregar di..
+                            dim = dim + caracter;
                         } else{
                             estadoActual = 6;
                         } break;
                     case 7:
                         if(caracterNumerico(caracter)){
                             estadoActual = 7;
-                            //Agregar di...
+                            dim = dim + caracter;
                         } else if(Coma(caracter)){
                             estadoActual = 7;
                         } else if(ParentesisC(caracter)){
@@ -134,24 +197,26 @@ public class scanner {
                     case 10:
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
                             estadoActual = 11;
-                            //Agregar a cadena
+                            port = port + caracter;
                         } else{
                             estadoActual = 10;
                         } break;
                     case 11:
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
                             estadoActual = 11;
-                            //Agregar a cadena
+                            port = port + caracter;
                         } else if(Espacios(caracter)){
                             estadoActual = 11;
-                            //Agregar a cadena
+                            port = port + caracter;
                         } else if(Coma(caracter)){
                             estadoActual = 11;
-                            //Agregar a cadena
+                            port = port + caracter;
                         } else if(Comillas(caracter)){
                             estadoActual = 12;
+                            lt.InsertarToken(port, "ID");
                         } else{
                             estadoActual = 11;
+                            port = port + caracter;
                         } break;
                     case 12:
                         if(ParentesisC(caracter)){
@@ -174,16 +239,17 @@ public class scanner {
                     case 15:
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
                             estadoActual = 16;
-                            //Ir agregando a cadena
+                           xxx = xxx + caracter;
                         } else{
                             estadoActual = 15;
                         } break;
                     case 16:
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
                             estadoActual = 16;
-                            //Ir agregando a cadena
+                            xxx = xxx + caracter;
                         } else if(ParentesisC(caracter)){
                             estadoActual = 17;
+                            lt.InsertarToken(xxx, "ID");
                         } break;
                     case 17:
                         if(PuntoComa(caracter)){
@@ -350,12 +416,12 @@ public class scanner {
                         if((aux.toUpperCase().equals("Persona"))||(aux.toUpperCase().equals("PERSONA"))||(aux.toUpperCase().equals("persona"))){
                             estadoActual = 3;
                             flag = 1;
-                            //Agregar a la lista
+                            lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                         } else if((aux.toUpperCase().equals("Relación"))||(aux.toUpperCase().equals("RELACIÓN"))||(aux.toUpperCase().equals("relación"))){
                             estadoActual = 3;
                             flag1 = 1;
-                            //Agregar a la lista
+                            lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                             
                         }
@@ -371,8 +437,6 @@ public class scanner {
                     arbol = 0;
                     contador --;
                     return true;
-                       
-                       //igualar la variable arbol a 0
                     } 
                     else{
                         estadoActual = 3;
@@ -385,27 +449,27 @@ public class scanner {
                         
                         if((aux.toUpperCase().equals("ID"))||(aux.toUpperCase().equals("id"))||(aux.toUpperCase().equals("Id"))){
                             estadoActual = 5;
-                            //Agregar a la lista de palabras reservadas
+                            lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                         } else if((aux.toUpperCase().equals("Nombre"))||(aux.toUpperCase().equals("NOMBRE"))||(aux.toUpperCase().equals("nombre"))&&(flag1 == 0)){
                             estadoActual = 7;
-                            //Agregar a la lista de palabras reservadas
+                           lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                         } else if((aux.toUpperCase().equals("Edad"))||(aux.toUpperCase().equals("edad"))||(aux.toUpperCase().equals("EDAD"))&&(flag1 == 0)){
                             estadoActual = 10;
-                            //Agregar a la lista de palabras reservadas
+                            lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                         } else if((aux.toUpperCase().equals("Parentesco"))||(aux.toUpperCase().equals("parentesco"))||(aux.toUpperCase().equals("PARENTESCO"))&&(flag1 == 0)){
                             estadoActual = 12;
-                            //Agregar a la lista de palabras reservadas
+                            lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                         }else if((aux.toUpperCase().equals("HIJOS"))||(aux.toUpperCase().equals("Hijos"))||(aux.toUpperCase().equals("hijos"))&&(flag1 == 1)){
                             estadoActual = 15;
-                            //Agregar a la lista de palabras reservadas
+                            lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                         } else if((aux.toUpperCase().equals("Hermanos"))||(aux.toUpperCase().equals("hermanos"))||(aux.toUpperCase().equals("HERMANOS"))&&(flag1 == 1)){
                             estadoActual = 15;
-                            //Agregar a la lista de palabras reservadas
+                            lt.InsertarToken(aux, "Palabra reservada");
                             aux = "";
                         }
                     } else{
@@ -422,7 +486,7 @@ public class scanner {
                     if(caracterNumerico(caracter)){
                         estadoActual = 6;
                         id = id + caracter;
-                        //guardar para más adelante
+                        
                     } else if(PuntoComa(caracter)){
                         estadoActual = 3;
                     }
@@ -443,7 +507,7 @@ public class scanner {
                         nombre = nombre + caracter;
                     } else if(Comillas(caracter)){
                         estadoActual = 9;
-                         // almacenar aux en una lista y vaciar
+                         
                     } else if(Espacios(caracter)){
                         estadoActual = 8;
                     }else{
@@ -460,7 +524,7 @@ public class scanner {
                     if(caracterNumerico(caracter)){
                         estadoActual = 11;
                         edad = edad + caracter;
-                        // agregar a una cadena
+                       
                     } else{
                         estadoActual = 10;
                     } break;
@@ -498,7 +562,11 @@ public class scanner {
                 case 14:
                     if(llaveCerrada(caracter)){
                       estadoActual = 0;
-                      //Agregar a la lista general e ir vaciando las variables
+                      lp.InsertarPersona(id, nombre, edad, parentesco);
+                      id = 0;
+                      nombre = "";
+                      edad = 0;
+                      parentesco = "";
                       flag = 0;
                     } else{
                         estadoActual = 14;
@@ -616,7 +684,7 @@ public class scanner {
                     if((comienzo.toUpperCase().equals("Encabezado"))||(comienzo.toUpperCase().equals("ENCABEZADO"))||(comienzo.toUpperCase().equals("encabezado"))){
                         encabezado = 1;
                         aceptacion = true;
-                        //Añadir a la lista de palabras reservadas
+                        lt.InsertarToken(comienzo, "Palabra reservada");
                         comienzo = "";
                         
                         return true;
@@ -624,14 +692,14 @@ public class scanner {
                     } else if((comienzo.toUpperCase().equals("Variables"))||(comienzo.toUpperCase().equals("VARIABLES"))||(comienzo.toUpperCase().equals("variables"))){
                         variables = 1;
                         aceptacion = true;
-                        //Añadir a la lista de palabras reservadas
+                        lt.InsertarToken(comienzo, "Palabra reservada");
                         comienzo = "";
                         
                         return true;
                     } else if((comienzo.toUpperCase().equals("Arbol"))||(comienzo.toUpperCase().equals("ARBOL"))||(comienzo.toUpperCase().equals("arbol"))){
                         arbol = 1;
                         aceptacion = true;
-                        //Añadir a la lista de palabras reservadas
+                        lt.InsertarToken(comienzo, "Palabra reservada");
                         comienzo = "";
                         
                         return true;
