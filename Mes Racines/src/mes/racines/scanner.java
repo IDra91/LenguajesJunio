@@ -5,6 +5,7 @@
  */
 package mes.racines;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
@@ -13,26 +14,27 @@ import javax.swing.JOptionPane;
  * @author Manuel
  */
 public class scanner {
-    String cadena;
-    String palabraRe;
-    String comienzo;
-    String finalizar;
-    String hipervinculo;
-    String nombre;
-    String parentesco;
-    int id;
-    int edad;
-    
-    int arbol;
-    int encabezado;
-    int variables;
+   String cadena = "";
+    String palabraRe = "";
+    String comienzo = "";
+    String finalizar = "";
+    String hipervinculo = "";
+    String nombre = "";
+    String parentesco = "";
+    int id = 0;
+    int edad = 0;    
+    int arbol = 0;
+    int encabezado = 0;
+    int variables = 0;
     int contador = 0;
-    int link;
-    ListaToken lt = new ListaToken();
+    int link = 0;
+    ArrayList lista = new ArrayList();
+    ArrayList vars = new ArrayList();
+    ArrayList padre = new ArrayList();
+    ArrayList madre = new ArrayList();
+    ArrayList hermano = new ArrayList();
     ListaPersona lp = new ListaPersona();
     public scanner(){
-        
-        
     }
     
     
@@ -40,46 +42,52 @@ public class scanner {
         char caracter;
         int estadoActual = 0;
         boolean aceptacion = false;
+        System.out.println("longitud:"+analisis.length());
         while(!aceptacion){
-            caracter = cadena.charAt(contador);
+            
+            caracter = analisis.charAt(contador);
+            System.out.println("General-> Estado="+estadoActual+",contador="+contador+",caracter="+caracter);
+                
             switch(estadoActual){
                 case 0:
-                    if(Comienzo(cadena)){
+                    if(Comienzo(analisis)){
                         estadoActual = 1;
                     } else{
                         estadoActual = -1;
                     } break;
                 case 1:
-                    if((Portada(cadena))||(Variables(cadena))||Arbol(cadena)){
+                    if((Portada(analisis))||(Variables(analisis))||Arbol(analisis)){
                         estadoActual = 2;
                     } else{
                         estadoActual = -1;
                     } break;
                 case 2:
-                    if(Comienzo(cadena)){
+                    if(Comienzo(analisis)){
                         estadoActual = 3;
                     } else{
                         estadoActual = -1;
                     } break;
                 case 3:
-                    if((Portada(cadena))||(Variables(cadena))||Arbol(cadena)){
+                    if(Variables(analisis)){
                         estadoActual = 4;
                     } else{
                         estadoActual = -1;
                     } break;
                 case 4:
-                    if(Comienzo(cadena)){
+                    if(Comienzo(analisis)){
                         estadoActual = 5;
                     } else{
                         estadoActual = -1;
                     } break;
                 case 5:
-                    if((Portada(cadena))||(Variables(cadena))||Arbol(cadena)){
+                    if(Arbol(analisis)){
                         estadoActual = 6;
-                        contador --;
+                        contador--;
+                        JOptionPane.showMessageDialog(null, "Felicidades, la cadena es correcta y se han almacenado los datos correctamente :D.");
+                      
                     } else{
                         estadoActual = -1;
-                        contador --;
+                        
                     } break;
                 case 6:
                     aceptacion = true;
@@ -93,20 +101,27 @@ public class scanner {
         String aux = "";
         String port = "";
         String xxx = "";
-        char caracter;
+        char caracter=' ';
         boolean aceptacion = false;
         int estadoActual = 0;
         String dim = "";
         int flag, flag1, flag2, flag3, flag4 = 0;
         if(encabezado == 1){
-            for(contador = contador; contador<cadena.length();contador++){
-                caracter = cadena.charAt(contador);
+            for(contador = contador; contador<analisis.length();contador++){
+                caracter = analisis.charAt(contador);
+                System.out.println("Portada-> Estado="+estadoActual+",contador="+contador+",caracter="+caracter);
                 switch(estadoActual){
                     case 0:
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
                             estadoActual = 1;
                             aux = aux + caracter;
                         } else{
+                            if(llaveCerrada(caracter)){
+                            aceptacion = true;
+                            encabezado = 0;
+                            contador --;
+                            return aceptacion;
+                        } 
                             estadoActual = 0;
                         } break;
                     case 1:
@@ -125,69 +140,24 @@ public class scanner {
                             estadoActual = 1;
                         } break;
                     case 2:
-                        if((aux.toUpperCase().equals("Imagen"))||(aux.toUpperCase().equals("IMAGEN"))||(aux.toUpperCase().equals("imagen"))){
-                           lt.InsertarToken(aux, "Palabra reservada");
-                           aux = "";
-                            estadoActual = 3; 
-                        } else if((aux.toUpperCase().equals("Texto"))||(aux.toUpperCase().equals("TEXTO"))||(aux.toUpperCase().equals("texto"))){
-                            lt.InsertarToken(aux, "Palabra reservada");
+                         if((aux.toUpperCase().equals("Texto"))||(aux.toUpperCase().equals("TEXTO"))||(aux.toUpperCase().equals("texto"))){
+                            lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 9;
                         } else if((aux.toUpperCase().equals("Negrita"))||(aux.toUpperCase().equals("NEGRITA"))||(aux.toUpperCase().equals("negrita"))){
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Cursiva"))||(aux.toUpperCase().equals("CURSIVA"))||(aux.toUpperCase().equals("cursiva"))){
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Subrayado"))||(aux.toUpperCase().equals("SUBRAYADO"))||(aux.toUpperCase().equals("subrayado"))){
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 14;
                         } break;
-                    case 3:
-                        if(Comillas(caracter)){
-                            estadoActual = 4;
-                        } else{
-                            estadoActual = 3;
-                        } break;
-                    case 4:
-                        if(Hiper(cadena)){
-                            estadoActual = 5;
-                        } else{
-                            estadoActual = 4;
-                        }break;
-                    case 5:
-                        if(Comillas(caracter)){
-                            estadoActual = 6;
-                        } else{
-                            estadoActual = 5;
-                        }break;
-                    case 6:
-                        if(caracterNumerico(caracter)){
-                            estadoActual = 7;
-                            dim = dim + caracter;
-                        } else{
-                            estadoActual = 6;
-                        } break;
-                    case 7:
-                        if(caracterNumerico(caracter)){
-                            estadoActual = 7;
-                            dim = dim + caracter;
-                        } else if(Coma(caracter)){
-                            estadoActual = 7;
-                        } else if(ParentesisC(caracter)){
-                            estadoActual = 8;
-                        } else{
-                            estadoActual = 7;
-                        } break;
-                    case 8:
-                        if(PuntoComa(caracter)){
-                            estadoActual = 0;
-                        } else{
-                            estadoActual = 8;
-                        } break;
+                    
                     case 9:
                         if(Comillas(caracter)){
                             estadoActual = 10;
@@ -211,9 +181,9 @@ public class scanner {
                         } else if(Coma(caracter)){
                             estadoActual = 11;
                             port = port + caracter;
-                        } else if(Comillas(caracter)){
+                        } else if(ParentesisA(caracter)){
                             estadoActual = 12;
-                            lt.InsertarToken(port, "ID");
+                            lista.add(port.toUpperCase());
                         } else{
                             estadoActual = 11;
                             port = port + caracter;
@@ -249,7 +219,7 @@ public class scanner {
                             xxx = xxx + caracter;
                         } else if(ParentesisC(caracter)){
                             estadoActual = 17;
-                            lt.InsertarToken(xxx, "ID");
+                            lista.add(xxx.toUpperCase());
                         } break;
                     case 17:
                         if(PuntoComa(caracter)){
@@ -266,7 +236,7 @@ public class scanner {
     
     public boolean Variables(String analisis){
         String aux = "";
-        char caracter;
+        char caracter=' ';
         boolean aceptacion = false;
         int estadoActual = 0; 
         int var = 0;
@@ -276,8 +246,9 @@ public class scanner {
               int  flag = 0; 
               int flag1 = 0;
         if(variables == 1){
-            for(contador = contador; contador<cadena.length() ; contador++){
-                caracter = cadena.charAt(contador);
+            for(contador = contador; contador<analisis.length() ; contador++){
+                caracter = analisis.charAt(contador);
+                System.out.println("Variables-> Estado="+estadoActual+",contador="+contador+",caracter="+caracter);
                 switch(estadoActual){
                     case 0:
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
@@ -318,22 +289,35 @@ public class scanner {
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
                             estadoActual = 3;
                             aux = aux + caracter;
-                        } else if(DosPuntos(caracter)){
+                        } else if(Igual(caracter)){
                             estadoActual = 4;
+                            contador--;
+                        }
+                        else if(PuntoComa(caracter)){
+                            estadoActual = 4;
+                            contador--;
                         } 
                         else{
                             estadoActual = 3;
                         } break;
                     case 4:
+                        System.out.println(aux);
                         if((aux.toUpperCase().equals("entero"))||(aux.toUpperCase().equals("ENTERO"))||(aux.toUpperCase().equals("Entero"))){
                             estadoActual = 5;
+                            aux="";
+                            System.out.println("4,entero");
                             flag = 1;
                         } else if((aux.toUpperCase().equals("Cadena"))||(aux.toUpperCase().equals("CADENA"))||(aux.toUpperCase().equals("cadena"))){
+                            System.out.println("4,cadena");
                             estadoActual = 6;
+                            aux="";
                             flag1 = 1;
                         } else{
-                            estadoActual = 4;
-                        }break;
+                            System.out.println("4,else");
+                            estadoActual = -1;System.out.println("ERROR variable:estado4, leyendo etiqueta");
+                        }
+                        contador--;
+                        break;
                     case 5:
                         if(Igual(caracter)){
                             estadoActual = 5;
@@ -341,8 +325,11 @@ public class scanner {
                             estadoActual = 5;
                             valor = valor+ caracter;
                         } else if(PuntoComa(caracter)){
-                            estadoActual = 0;
                             var = valor;
+                            vars.add(var);
+                           
+                            estadoActual = 0;
+                            
                         } else{
                             estadoActual = 5;
                         } break;
@@ -359,6 +346,7 @@ public class scanner {
                         } else if(Espacios(caracter)){
                             estadoActual = 7;
                             cad = cad + caracter;
+                            vars.add(cad.toUpperCase());
                         }
                         else if(Comilla(caracter)){
                             estadoActual = 8;
@@ -379,16 +367,16 @@ public class scanner {
     
     
     public boolean Arbol(String analisis){
-        String aux = "";
-        
+        String aux = "";        
         char caracter;
         boolean aceptacion = false;
         int estadoActual = 0;
         int flag = 0;
         int flag1 = 0;
         if(arbol == 1){
-        for(contador = contador; contador<cadena.length();contador++){
-            caracter = cadena.charAt(contador);
+        for(contador = contador; contador<analisis.length();contador++){
+            caracter = analisis.charAt(contador);
+            System.out.println("Arbol-> Estado="+estadoActual+",contador="+contador+",caracter="+caracter);
             switch(estadoActual){
                 case 0:
                     if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
@@ -403,9 +391,6 @@ public class scanner {
                         aux = aux + caracter;
                     } else if(DosPuntos(caracter)){
                         estadoActual = 2;
-                        
-                        
-                        
                     }
                 else{
                        estadoActual = 1;         
@@ -416,12 +401,12 @@ public class scanner {
                         if((aux.toUpperCase().equals("Persona"))||(aux.toUpperCase().equals("PERSONA"))||(aux.toUpperCase().equals("persona"))){
                             estadoActual = 3;
                             flag = 1;
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
-                        } else if((aux.toUpperCase().equals("Relación"))||(aux.toUpperCase().equals("RELACIÓN"))||(aux.toUpperCase().equals("relación"))){
+                        } else if((aux.toUpperCase().equals("Relacion"))||(aux.toUpperCase().equals("RELACION"))||(aux.toUpperCase().equals("relacion"))){
                             estadoActual = 3;
                             flag1 = 1;
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                             
                         }
@@ -449,27 +434,27 @@ public class scanner {
                         
                         if((aux.toUpperCase().equals("ID"))||(aux.toUpperCase().equals("id"))||(aux.toUpperCase().equals("Id"))){
                             estadoActual = 5;
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());;
                             aux = "";
                         } else if((aux.toUpperCase().equals("Nombre"))||(aux.toUpperCase().equals("NOMBRE"))||(aux.toUpperCase().equals("nombre"))&&(flag1 == 0)){
                             estadoActual = 7;
-                           lt.InsertarToken(aux, "Palabra reservada");
+                           lista.add(aux.toUpperCase());;
                             aux = "";
                         } else if((aux.toUpperCase().equals("Edad"))||(aux.toUpperCase().equals("edad"))||(aux.toUpperCase().equals("EDAD"))&&(flag1 == 0)){
                             estadoActual = 10;
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                         } else if((aux.toUpperCase().equals("Parentesco"))||(aux.toUpperCase().equals("parentesco"))||(aux.toUpperCase().equals("PARENTESCO"))&&(flag1 == 0)){
                             estadoActual = 12;
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                         }else if((aux.toUpperCase().equals("HIJOS"))||(aux.toUpperCase().equals("Hijos"))||(aux.toUpperCase().equals("hijos"))&&(flag1 == 1)){
                             estadoActual = 15;
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                         } else if((aux.toUpperCase().equals("Hermanos"))||(aux.toUpperCase().equals("hermanos"))||(aux.toUpperCase().equals("HERMANOS"))&&(flag1 == 1)){
                             estadoActual = 15;
-                            lt.InsertarToken(aux, "Palabra reservada");
+                            lista.add(aux.toUpperCase());
                             aux = "";
                         }
                     } else{
@@ -603,20 +588,20 @@ public class scanner {
                 case 19:
                     if(caracterNumerico(caracter)){
                         estadoActual = 20;
-                        //Agregar a una cadena
+                        cadena = cadena + caracter;
                     } else{
                         estadoActual = 19;
                     } break;
                 case 20:
                     if(caracterNumerico(caracter)){
                         estadoActual = 20;
-                        //Agregar a una cadena
+                        cadena = cadena + caracter;
                     } else if(Coma(caracter)){
                         estadoActual = 20;
                     } else if(PuntoComa(caracter)){
                         estadoActual = 3;
                     } break;
-                case 666:
+                
                     
                     
                 default: 
@@ -624,11 +609,7 @@ public class scanner {
         }
          
         }
-        if (estadoActual==19) {  
-            return true; //Si la cadena ya terminó, y el estado quedó en 19
-            
-        }else
-        return false;
+       
         
         } return false;}
     
@@ -637,8 +618,9 @@ public class scanner {
         char caracter;
         boolean aceptacion = false;
         int estadoActual = 0;
-        for(contador = contador; contador<cadena.length();contador++){
-            caracter = cadena.charAt(contador);
+        for(contador = contador; contador<analisis.length();contador++){
+            caracter = analisis.charAt(contador);
+            System.out.println("Hiper-> Estado="+estadoActual+",contador="+contador+",caracter="+caracter);
             switch(estadoActual){
                 case 0:
                     if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
@@ -649,7 +631,49 @@ public class scanner {
                     } break;
                     
                 case 1:
-                    //Terminar el autómata de los hipervinculos
+                   if(DosPuntos(caracter)){
+                       estadoActual = 2;
+                       hipervinculo = hipervinculo + caracter;
+                   } else{
+                       estadoActual = 1;
+                   } break;
+                case 2:
+                    if(Slash(caracter)){
+                        estadoActual = 3;
+                        hipervinculo = hipervinculo + caracter;
+                    } else{
+                        estadoActual = 2;
+                    } break;
+                case 3:
+                    if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
+                        estadoActual = 4;
+                        hipervinculo = hipervinculo + caracter;
+                    } else{
+                        estadoActual = 3;
+                    } break;
+                case 4:
+                    if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))||(SlashInverted(caracter))){
+                        estadoActual = 4;
+                        hipervinculo = hipervinculo + caracter;
+                    } else if(Punto(caracter)){
+                        estadoActual = 5;
+                        hipervinculo = hipervinculo + caracter;
+                    } else{
+                        estadoActual = 4;
+                    } break;
+                case 5:
+                    if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
+                        estadoActual = 5;
+                        hipervinculo = hipervinculo + caracter;
+                    } else if(Comillas(caracter)){
+                        estadoActual = 6;
+                    } else{
+                        estadoActual = 5;
+                    } break;
+                case 6:
+                    lista.add(hipervinculo.toUpperCase());
+                    aceptacion = true;
+                    contador --;
             }
         }
         return false;
@@ -662,8 +686,9 @@ public class scanner {
         char caracter;
         boolean aceptacion = false;
         int estadoActual = 0;
-        for(contador = contador; contador<cadena.length();contador++){
-            caracter = cadena.charAt(contador);
+        for(contador = contador; contador<analisis.length();contador++){
+            caracter = analisis.charAt(contador);
+            System.out.println("Comienzo-> Estado="+estadoActual+",contador="+contador+",caracter="+caracter);
             switch(estadoActual){
                 case 0:
                     if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
@@ -684,24 +709,24 @@ public class scanner {
                     if((comienzo.toUpperCase().equals("Encabezado"))||(comienzo.toUpperCase().equals("ENCABEZADO"))||(comienzo.toUpperCase().equals("encabezado"))){
                         encabezado = 1;
                         aceptacion = true;
-                        lt.InsertarToken(comienzo, "Palabra reservada");
+                        lista.add(comienzo.toUpperCase());
                         comienzo = "";
-                        
+                        contador --;
                         return true;
                         
                     } else if((comienzo.toUpperCase().equals("Variables"))||(comienzo.toUpperCase().equals("VARIABLES"))||(comienzo.toUpperCase().equals("variables"))){
                         variables = 1;
                         aceptacion = true;
-                        lt.InsertarToken(comienzo, "Palabra reservada");
+                        lista.add(comienzo.toUpperCase());
                         comienzo = "";
-                        
+                        contador --;
                         return true;
                     } else if((comienzo.toUpperCase().equals("Arbol"))||(comienzo.toUpperCase().equals("ARBOL"))||(comienzo.toUpperCase().equals("arbol"))){
                         arbol = 1;
                         aceptacion = true;
-                        lt.InsertarToken(comienzo, "Palabra reservada");
+                        lista.add(comienzo.toUpperCase());
                         comienzo = "";
-                        
+                        contador --;
                         return true;
                     }
             }
@@ -711,7 +736,7 @@ public class scanner {
     }
     
     public boolean SlashInverted(char valor){
-        if(valor == 92){
+        if(valor == '\\'){
             return true;
             
         } else{
@@ -765,7 +790,7 @@ public class scanner {
     }
     
     public boolean Comilla(char valor){
-        if(valor== 39){
+        if(valor== '’'){
             return true;
         } else
             return false;
@@ -817,7 +842,7 @@ public class scanner {
             return false;
     }
     public boolean Comillas(char valor){
-        if((valor== 34)){
+        if((valor== '”')){
             return true;
         } else
             return false;

@@ -16,6 +16,8 @@ public class ventana extends javax.swing.JFrame {
     JFileChooser seleccionado = new JFileChooser();
     GestionArchivos ga = new GestionArchivos();
     File archivo;
+    String cadena = "";
+    
     /**
      * Creates new form ventana
      */
@@ -50,9 +52,15 @@ public class ventana extends javax.swing.JFrame {
 
         TextoAnalizar.setColumns(20);
         TextoAnalizar.setRows(5);
+        TextoAnalizar.setText("ENCABEZADO { Texto(“Arbol Genealogico, fam. Rosales Calel”); Negrita(ON); Cursiva(OFF); Subrayado(ON); } \nVARIABLES { X1,X2,X3,X4,X5: entero=39; VAR1: cadena=’hola’; Valor: entero; }\nARBOL { Persona:{ id:1 nombre:”Julio Rosales”; edad: 40; parentesco: padre; } Persona:{ id:2 nombre:”Maria Calel”; edad: 38; parentesco: madre; } Persona:{ id:3 nombre:”Juan Rosales Calel”; edad: 18; parentesco:hijo,hermano; } Persona:{ id:4 nombre:”Lucia Rosales Calel”; edad: 23; parentesco:hijo,hermano; } Relacion:{  hijos(1): 3,4; hijos(2):3,4; hermanos(3):4; hermanos(4):3; } }");
         jScrollPane1.setViewportView(TextoAnalizar);
 
         Analizar.setText("¡Analizar!");
+        Analizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnalizarActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Archivos");
 
@@ -147,6 +155,12 @@ public class ventana extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_GuardarActionPerformed
+
+    private void AnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalizarActionPerformed
+        scanner s = new scanner();
+        cadena = TextoAnalizar.getText();        
+        s.ScannerGeneral(cadena);
+    }//GEN-LAST:event_AnalizarActionPerformed
 
     /**
      * @param args the command line arguments
