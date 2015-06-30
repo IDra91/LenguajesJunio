@@ -33,7 +33,11 @@ public class scanner {
     ArrayList padre = new ArrayList();
     ArrayList madre = new ArrayList();
     ArrayList hermano = new ArrayList();
+    ArrayList PalabraReservada = new ArrayList();
+    ArrayList ID = new ArrayList();
+    ArrayList Segmento = new ArrayList();
     ListaPersona lp = new ListaPersona();
+    
     public scanner(){
     }
     

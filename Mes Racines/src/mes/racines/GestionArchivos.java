@@ -13,6 +13,7 @@ public class GestionArchivos {
     FileInputStream entrada;
     FileOutputStream salida;
     File archivo;
+    scanner s = new scanner ();
     
     public GestionArchivos(){
         
@@ -45,6 +46,23 @@ public class GestionArchivos {
         }
         return respuesta;
     }
+    public boolean Verificar(int i){
+        if((s.lista.contains(s.ID.indexOf(i)))||(s.lista.contains(s.PalabraReservada.indexOf(i)))||(s.lista.contains(s.vars.indexOf(i)))){
+            return true;
+        }
+        return false;
+    }
+   
+    public String Retorno(int i){
+        if(s.lista.contains(s.ID.indexOf(i))){
+            return "ID";
+        } else if(s.lista.contains(s.vars.indexOf(i))){
+            return "Variables";
+        } else{
+            return "";
+        }
+    }
+    
     
     public void GenerarPagina(){
         FileWriter filewriter = null;
@@ -63,8 +81,11 @@ public class GestionArchivos {
             printwriter.println("<left><h1><font color =\"green\">Escuela de ciencias</font></h1></left>");
             printwriter.println("<left><h1><font color =\"green\">Ingeniería en Ciencias y Sistemas</font></h1></left>");
             printwriter.println("<left><h1><font color =\"green\">Lenguajes Formales y de Programación</font></h1></left>");
-            printwriter.println("");
-            
+            printwriter.println("<Table border = 1 Width= 300");
+            printwriter.println("<td width = 100> No. Token </td> <td width = 100> Token </td> <td width = 100> Lexema </td> <td width = 100> Palabra Reservada </td> <td width = 100> Tipo </td>");
+            for(int i = 0; i<s.lista.size(); i++ ){
+               printwriter.println("<td width = 100>"+ s.lista.indexOf(i) +"</td> <td width = 100>"+ this.Retorno(i) + "</td> <td width = 100>" + s.lista.get(i) + "</td> <td width = 100> Token" + this.Verificar(i) + "</td>");
+            }
             printwriter.println("</body>");
             printwriter.println("</html>");
             printwriter.close();

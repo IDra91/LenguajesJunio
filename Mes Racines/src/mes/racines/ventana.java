@@ -43,8 +43,9 @@ public class ventana extends javax.swing.JFrame {
         Abrir = new javax.swing.JMenuItem();
         Guardar = new javax.swing.JMenuItem();
         Salir = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        Generar = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -90,11 +91,20 @@ public class ventana extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Generar");
-        jMenuBar1.add(jMenu2);
+        jMenu3.setText("Generar");
 
-        jMenu3.setText("Acerca de");
+        Generar.setText("Generar HTML");
+        Generar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GenerarActionPerformed(evt);
+            }
+        });
+        jMenu3.add(Generar);
+
         jMenuBar1.add(jMenu3);
+
+        jMenu4.setText("Acerca de");
+        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -105,19 +115,19 @@ public class ventana extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(199, 199, 199)
-                        .addComponent(Analizar)))
-                .addContainerGap(97, Short.MAX_VALUE))
+                        .addComponent(Analizar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Analizar)
                 .addContainerGap(30, Short.MAX_VALUE))
         );
@@ -162,6 +172,10 @@ public class ventana extends javax.swing.JFrame {
         s.ScannerGeneral(cadena);
     }//GEN-LAST:event_AnalizarActionPerformed
 
+    private void GenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerarActionPerformed
+        ga.GenerarPagina();
+    }//GEN-LAST:event_GenerarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -200,12 +214,13 @@ public class ventana extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Abrir;
     private javax.swing.JButton Analizar;
+    private javax.swing.JMenuItem Generar;
     private javax.swing.JMenuItem Guardar;
     private javax.swing.JMenuItem Salir;
     private javax.swing.JTextArea TextoAnalizar;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
