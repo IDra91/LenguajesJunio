@@ -47,7 +47,7 @@ public class GestionArchivos {
         return respuesta;
     }
     public boolean Verificar(int i){
-        if((s.lista.contains(s.ID.indexOf(i)))||(s.lista.contains(s.PalabraReservada.indexOf(i)))||(s.lista.contains(s.vars.indexOf(i)))){
+        if((s.lista.contains(s.ID.indexOf(i)))||(s.lista.contains(s.Errores.indexOf(i)))||(s.lista.contains(s.vars.indexOf(i)))){
             return true;
         }
         return false;
@@ -58,7 +58,10 @@ public class GestionArchivos {
             return "ID";
         } else if(s.lista.contains(s.vars.indexOf(i))){
             return "Variables";
-        } else{
+        } else if(s.lista.contains(s.Errores.indexOf(i))){
+            return "Errores";
+        } 
+        else{
             return "";
         }
     }
@@ -75,20 +78,48 @@ public class GestionArchivos {
             printwriter.println("<html>");
             printwriter.println("<head><title> Tabla de Elementos </title></head>");
             printwriter.println("<body>");
-            printwriter.println("<right><img src=\"C:\\Users\\Manuel\\Documents\\NetBeansProjects\\Mes Racines\\src\\mes\\racines\\usac.jpg\"></right>");
+            printwriter.println("<img src=\"usac.jpg\" width = \"200px\">");
             printwriter.println("<left><h1><font color =\"green\">Universidad de San Carlos de Guatemala</font></h1></left>");
-            printwriter.println("<left><h1><font color =\"green\">Facultad de Ingeniería</font></h1></left>");
+            printwriter.println("<left><h1><font color =\"green\">Facultad de Ingenieria</font></h1></left>");
             printwriter.println("<left><h1><font color =\"green\">Escuela de ciencias</font></h1></left>");
-            printwriter.println("<left><h1><font color =\"green\">Ingeniería en Ciencias y Sistemas</font></h1></left>");
-            printwriter.println("<left><h1><font color =\"green\">Lenguajes Formales y de Programación</font></h1></left>");
-            printwriter.println("<Table border = 1 Width= 300");
-            printwriter.println("<td width = 100> No. Token </td> <td width = 100> Token </td> <td width = 100> Lexema </td> <td width = 100> Palabra Reservada </td> <td width = 100> Tipo </td>");
+            printwriter.println("<left><h1><font color =\"green\">Ingenieria en Ciencias y Sistemas</font></h1></left>");
+            printwriter.println("<left><h1><font color =\"green\">Lenguajes Formales y de Programacion</font></h1></left>");
+            printwriter.println("<Table border = 1 Width= 300>");
+            printwriter.println("");
+            printwriter.println("<tr><td width = 100> No. Token </td> <td width = 100> Token </td> <td width = 100> Lexema </td> <td width = 100> Palabra Reservada </td> <td width = 100> Tipo </td></tr>");
+            System.out.println(s.lista.size()+"");
             for(int i = 0; i<s.lista.size(); i++ ){
-               printwriter.println("<td width = 100>"+ s.lista.indexOf(i) +"</td> <td width = 100>"+ this.Retorno(i) + "</td> <td width = 100>" + s.lista.get(i) + "</td> <td width = 100> Token" + this.Verificar(i) + "</td>");
+               System.out.println("sdsdasdasdsad");
+               printwriter.println("<tr><td width = 100>"+ i +"</td> <td width = 100>"+ this.Retorno(i) + "</td> <td width = 100>" + s.lista.get(i) + "</td> <td width = 100> Token" + this.Verificar(i) + "</td></tr>");
             }
+            printwriter.println("</table>");
             printwriter.println("</body>");
             printwriter.println("</html>");
             printwriter.close();
+        } catch(Exception e){
+            
+        }
+    }
+    
+    public void GenerarGrafo(String padre, String madre, String hijo, String hermano){
+        FileWriter fw = null;
+        PrintWriter pw = null;
+        try{
+            fw = new FileWriter("grafo1.txt");
+            pw = new PrintWriter(fw);
+            pw.println("diagraph G{ ");
+            pw.println(padre+";");
+            pw.println(madre+";");
+            pw.println(hijo+";");
+            pw.println(hermano+";");
+            pw.println(padre+" "+"->"+ hermano + " "+ ";");
+            pw.println(madre+" "+"->"+ hermano + " "+";");
+            pw.println(padre+" "+"->"+ hermano+" "+";");
+            pw.println(madre+" "+"->"+ hermano + " "+ ";");
+            pw.println(hermano+" "+"->"+ hermano +" "+ ";");
+            pw.println("}");
+            pw.close();
+            
         } catch(Exception e){
             
         }

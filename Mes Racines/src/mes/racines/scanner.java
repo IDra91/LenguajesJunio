@@ -5,6 +5,8 @@
  */
 package mes.racines;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
@@ -28,20 +30,21 @@ public class scanner {
     int variables = 0;
     int contador = 0;
     int link = 0;
-    ArrayList lista = new ArrayList();
-    ArrayList vars = new ArrayList();
-    ArrayList padre = new ArrayList();
-    ArrayList madre = new ArrayList();
-    ArrayList hermano = new ArrayList();
-    ArrayList PalabraReservada = new ArrayList();
-    ArrayList ID = new ArrayList();
-    ArrayList Segmento = new ArrayList();
+    public ArrayList lista = new ArrayList();
+    public ArrayList vars = new ArrayList();
+    public ArrayList padre = new ArrayList();
+    public ArrayList madre = new ArrayList();
+    public ArrayList hermano = new ArrayList();
+    public ArrayList Errores = new ArrayList();
+    public ArrayList ID = new ArrayList();
+    public ArrayList Segmento = new ArrayList();
+    public ArrayList Personas = new ArrayList();
     ListaPersona lp = new ListaPersona();
-    
+   
     public scanner(){
     }
     
-    
+    //Ya se a quitado el upercase
     public void ScannerGeneral(String analisis){
         char caracter;
         int estadoActual = 0;
@@ -87,7 +90,7 @@ public class scanner {
                     if(Arbol(analisis)){
                         estadoActual = 6;
                         contador--;
-                        JOptionPane.showMessageDialog(null, "Felicidades, la cadena es correcta y se han almacenado los datos correctamente :D.");
+                        
                       
                     } else{
                         estadoActual = -1;
@@ -100,12 +103,13 @@ public class scanner {
         }
     }
     
-    
+    //Ya se ha quitado el uppercase
     public boolean Portada(String analisis){
         String aux = "";
         String port = "";
         String xxx = "";
         char caracter=' ';
+        
         boolean aceptacion = false;
         int estadoActual = 0;
         String dim = "";
@@ -145,18 +149,22 @@ public class scanner {
                         } break;
                     case 2:
                          if((aux.toUpperCase().equals("Texto"))||(aux.toUpperCase().equals("TEXTO"))||(aux.toUpperCase().equals("texto"))){
-                            lista.add(aux.toUpperCase());
+                            System.out.println(aux.toUpperCase());
+                             lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 9;
                         } else if((aux.toUpperCase().equals("Negrita"))||(aux.toUpperCase().equals("NEGRITA"))||(aux.toUpperCase().equals("negrita"))){
+                            System.out.println(aux.toUpperCase());
                             lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Cursiva"))||(aux.toUpperCase().equals("CURSIVA"))||(aux.toUpperCase().equals("cursiva"))){
+                           System.out.println(aux.toUpperCase());
                             lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Subrayado"))||(aux.toUpperCase().equals("SUBRAYADO"))||(aux.toUpperCase().equals("subrayado"))){
+                            System.out.println(aux.toUpperCase());
                             lista.add(aux.toUpperCase());
                             aux = "";
                             estadoActual = 14;
@@ -187,6 +195,7 @@ public class scanner {
                             port = port + caracter;
                         } else if(ParentesisA(caracter)){
                             estadoActual = 12;
+                            System.out.println(port.toUpperCase());
                             lista.add(port.toUpperCase());
                         } else{
                             estadoActual = 11;
@@ -223,6 +232,7 @@ public class scanner {
                             xxx = xxx + caracter;
                         } else if(ParentesisC(caracter)){
                             estadoActual = 17;
+                            System.out.println(xxx.toUpperCase());
                             lista.add(xxx.toUpperCase());
                         } break;
                     case 17:
@@ -237,13 +247,13 @@ public class scanner {
         return aceptacion;
     }
     
-    
+    //Ya se ha quitado el uppercase
     public boolean Variables(String analisis){
         String aux = "";
         char caracter=' ';
         boolean aceptacion = false;
         int estadoActual = 0; 
-        int var = 0;
+        String var = "";
         int valor = 0;
         String var2 = "";
         String cad = "";
@@ -308,11 +318,17 @@ public class scanner {
                         System.out.println(aux);
                         if((aux.toUpperCase().equals("entero"))||(aux.toUpperCase().equals("ENTERO"))||(aux.toUpperCase().equals("Entero"))){
                             estadoActual = 5;
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux="";
                             System.out.println("4,entero");
                             flag = 1;
                         } else if((aux.toUpperCase().equals("Cadena"))||(aux.toUpperCase().equals("CADENA"))||(aux.toUpperCase().equals("cadena"))){
                             System.out.println("4,cadena");
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             estadoActual = 6;
                             aux="";
                             flag1 = 1;
@@ -329,7 +345,9 @@ public class scanner {
                             estadoActual = 5;
                             valor = valor+ caracter;
                         } else if(PuntoComa(caracter)){
-                            var = valor;
+                            
+                            System.out.println(var.toUpperCase());
+                            lista.add(var);
                             vars.add(var);
                            
                             estadoActual = 0;
@@ -350,7 +368,10 @@ public class scanner {
                         } else if(Espacios(caracter)){
                             estadoActual = 7;
                             cad = cad + caracter;
-                            vars.add(cad.toUpperCase());
+                            System.out.println(cad.toUpperCase());
+                            lista.add(cad);
+                            vars.add(cad);
+                            
                         }
                         else if(Comilla(caracter)){
                             estadoActual = 8;
@@ -369,10 +390,11 @@ public class scanner {
         return aceptacion;
     }
     
-    
+    //Ya se ha quitado el uppercase
     public boolean Arbol(String analisis){
         String aux = "";        
         char caracter;
+        int counter = 0;
         boolean aceptacion = false;
         int estadoActual = 0;
         int flag = 0;
@@ -405,12 +427,16 @@ public class scanner {
                         if((aux.toUpperCase().equals("Persona"))||(aux.toUpperCase().equals("PERSONA"))||(aux.toUpperCase().equals("persona"))){
                             estadoActual = 3;
                             flag = 1;
-                            lista.add(aux.toUpperCase());
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux = "";
                         } else if((aux.toUpperCase().equals("Relacion"))||(aux.toUpperCase().equals("RELACION"))||(aux.toUpperCase().equals("relacion"))){
                             estadoActual = 3;
                             flag1 = 1;
-                            lista.add(aux.toUpperCase());
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux = "";
                             
                         }
@@ -438,27 +464,39 @@ public class scanner {
                         
                         if((aux.toUpperCase().equals("ID"))||(aux.toUpperCase().equals("id"))||(aux.toUpperCase().equals("Id"))){
                             estadoActual = 5;
-                            lista.add(aux.toUpperCase());;
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux = "";
                         } else if((aux.toUpperCase().equals("Nombre"))||(aux.toUpperCase().equals("NOMBRE"))||(aux.toUpperCase().equals("nombre"))&&(flag1 == 0)){
                             estadoActual = 7;
-                           lista.add(aux.toUpperCase());;
+                           System.out.println(aux);
+                            lista.add(aux);
+                           ID.add(aux);
                             aux = "";
                         } else if((aux.toUpperCase().equals("Edad"))||(aux.toUpperCase().equals("edad"))||(aux.toUpperCase().equals("EDAD"))&&(flag1 == 0)){
                             estadoActual = 10;
-                            lista.add(aux.toUpperCase());
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux = "";
                         } else if((aux.toUpperCase().equals("Parentesco"))||(aux.toUpperCase().equals("parentesco"))||(aux.toUpperCase().equals("PARENTESCO"))&&(flag1 == 0)){
                             estadoActual = 12;
-                            lista.add(aux.toUpperCase());
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux = "";
                         }else if((aux.toUpperCase().equals("HIJOS"))||(aux.toUpperCase().equals("Hijos"))||(aux.toUpperCase().equals("hijos"))&&(flag1 == 1)){
                             estadoActual = 15;
-                            lista.add(aux.toUpperCase());
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux = "";
                         } else if((aux.toUpperCase().equals("Hermanos"))||(aux.toUpperCase().equals("hermanos"))||(aux.toUpperCase().equals("HERMANOS"))&&(flag1 == 1)){
                             estadoActual = 15;
-                            lista.add(aux.toUpperCase());
+                            System.out.println(aux);
+                            lista.add(aux);
+                            ID.add(aux);
                             aux = "";
                         }
                     } else{
@@ -540,7 +578,7 @@ public class scanner {
                         estadoActual = 13;
                         parentesco = parentesco + caracter;
                     } else if(PuntoComa(caracter)){
-                        estadoActual = 14;
+                        estadoActual = 666;
                     } else if(Espacios(caracter)){
                         estadoActual = 13;
                         parentesco = parentesco + caracter;
@@ -548,10 +586,29 @@ public class scanner {
                     else{
                         estadoActual = 13;
                     } break;
+                case 666:
+                    if((parentesco.toUpperCase().equals("Padre"))||(parentesco.toUpperCase().equals("padre"))||(parentesco.toUpperCase().equals("PADRE"))){
+                        System.out.println(nombre);
+                        padre.add(nombre);
+                        estadoActual = 14;
+                    } else if ((parentesco.toUpperCase().equals("Madre"))||(parentesco.toUpperCase().equals("madre"))||(parentesco.toUpperCase().equals("MADRE"))){
+                        System.out.println(nombre);
+                        madre.add(nombre);
+                        estadoActual = 14;
+                    } else if ((parentesco.toUpperCase().equals("Hijo"))||(parentesco.toUpperCase().equals("hijo"))||(parentesco.toUpperCase().equals("HIJO"))){
+                        System.out.println(nombre);
+                        hermano.add(nombre);
+                        estadoActual = 14;
+                    } else{
+                        Errores.add(nombre);
+                        estadoActual = 14;
+                    }
                 case 14:
                     if(llaveCerrada(caracter)){
                       estadoActual = 0;
                       lp.InsertarPersona(id, nombre, edad, parentesco);
+                      
+                      
                       id = 0;
                       nombre = "";
                       edad = 0;
@@ -675,6 +732,7 @@ public class scanner {
                         estadoActual = 5;
                     } break;
                 case 6:
+                    System.out.println(hipervinculo.toUpperCase());
                     lista.add(hipervinculo.toUpperCase());
                     aceptacion = true;
                     contador --;
@@ -713,7 +771,9 @@ public class scanner {
                     if((comienzo.toUpperCase().equals("Encabezado"))||(comienzo.toUpperCase().equals("ENCABEZADO"))||(comienzo.toUpperCase().equals("encabezado"))){
                         encabezado = 1;
                         aceptacion = true;
-                        lista.add(comienzo.toUpperCase());
+                        System.out.println(comienzo);
+                        lista.add(comienzo);
+                        Segmento.add(comienzo);
                         comienzo = "";
                         contador --;
                         return true;
@@ -721,14 +781,18 @@ public class scanner {
                     } else if((comienzo.toUpperCase().equals("Variables"))||(comienzo.toUpperCase().equals("VARIABLES"))||(comienzo.toUpperCase().equals("variables"))){
                         variables = 1;
                         aceptacion = true;
-                        lista.add(comienzo.toUpperCase());
+                        System.out.println(comienzo);
+                        lista.add(comienzo);
+                        Segmento.add(comienzo);
                         comienzo = "";
                         contador --;
                         return true;
                     } else if((comienzo.toUpperCase().equals("Arbol"))||(comienzo.toUpperCase().equals("ARBOL"))||(comienzo.toUpperCase().equals("arbol"))){
                         arbol = 1;
                         aceptacion = true;
-                        lista.add(comienzo.toUpperCase());
+                        System.out.println(comienzo);
+                        lista.add(comienzo);
+                        Segmento.add(comienzo);
                         comienzo = "";
                         contador --;
                         return true;
@@ -862,5 +926,60 @@ public class scanner {
             return true;
         } else 
             return false;
+    }
+
+public boolean Verificar(int i){
+        if((lista.contains(ID.indexOf(i)))||(lista.contains(Errores.indexOf(i)))||(lista.contains(vars.indexOf(i)))){
+            return true;
+        }
+        return false;
+    }
+   
+    public String Retorno(int i){
+        if(lista.contains(ID.indexOf(i))){
+            return "ID";
+        } else if(lista.contains(vars.indexOf(i))){
+            return "Variables";
+        } else if(lista.contains(Errores.indexOf(i))){
+            return "Errores";
+        } 
+        else{
+            return "";
+        }
+    }
+    
+    
+    public void GenerarPagina(){
+        FileWriter filewriter = null;
+        PrintWriter printwriter = null;
+        
+        try{
+            filewriter = new FileWriter("readme.html");
+            printwriter = new PrintWriter(filewriter);
+            
+            printwriter.println("<html>");
+            printwriter.println("<head><title> Tabla de Elementos </title></head>");
+            printwriter.println("<body>");
+            printwriter.println("<img src=\"usac.jpg\" width = \"200px\">");
+            printwriter.println("<left><h1><font color =\"green\">Universidad de San Carlos de Guatemala</font></h1></left>");
+            printwriter.println("<left><h1><font color =\"green\">Facultad de Ingenieria</font></h1></left>");
+            printwriter.println("<left><h1><font color =\"green\">Escuela de ciencias</font></h1></left>");
+            printwriter.println("<left><h1><font color =\"green\">Ingenieria en Ciencias y Sistemas</font></h1></left>");
+            printwriter.println("<left><h1><font color =\"green\">Lenguajes Formales y de Programacion</font></h1></left>");
+            printwriter.println("<Table border = 1 Width= 300>");
+            printwriter.println("");
+            printwriter.println("<tr><td width = 100> No. Token </td> <td width = 100> Token </td> <td width = 100> Lexema </td> <td width = 100> Palabra Reservada </td> <td width = 100> Tipo </td></tr>");
+            System.out.println(lista.size()+"");
+            for(int i = 0; i<lista.size(); i++ ){
+               System.out.println("sdsdasdasdsad");
+               printwriter.println("<tr><td width = 100>"+ i +"</td> <td width = 100>"+ this.Retorno(i) + "</td> <td width = 100>" + lista.get(i) + "</td> <td width = 100> Token" + this.Verificar(i) + "</td></tr>");
+            }
+            printwriter.println("</table>");
+            printwriter.println("</body>");
+            printwriter.println("</html>");
+            printwriter.close();
+        } catch(Exception e){
+            
+        }
     }
 }

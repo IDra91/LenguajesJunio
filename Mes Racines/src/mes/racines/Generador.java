@@ -33,10 +33,19 @@ public class Generador {
     public void Generar(){
         try{
             String dotpath= "C:\\Program Files (x86)\\Graphviz 2.28\\bin\\dot.exe";
-            String fileInputPath = "C:\\grafo1.txt";
+            String fileInputPath = "C:\\Users\\Manuel\\Documents\\NetBeansProjects\\Mes Racines\\grafo1.txt";
             String fileOutputPath = "C:\\arbol.jpg";
             String tParam = "-Tjpg";
             String tOParam = "-o";
+            String[] cmd = new String[5];
+            cmd[0] = dotpath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+            
+            Runtime rt = Runtime.getRuntime();
+            rt.exec(cmd);
             
         } catch(Exception e){
             e.printStackTrace();

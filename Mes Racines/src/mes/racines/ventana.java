@@ -173,7 +173,8 @@ public class ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_AnalizarActionPerformed
 
     private void GenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerarActionPerformed
-        ga.GenerarPagina();
+        scanner s = new scanner();
+        s.GenerarPagina();
     }//GEN-LAST:event_GenerarActionPerformed
 
     /**
