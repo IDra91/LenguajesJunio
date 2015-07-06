@@ -113,7 +113,8 @@ public class scanner {
                     System.out.println(madre.get(0));
                     System.out.println(hermano.get(0));
                     System.out.println(hermano.get(1));
-                    System.out.println(vars.get(0));
+                    System.out.println(variable.get(0).variable);
+                    System.out.println(variable.get(0).valor);
             }
         }
     }
@@ -304,8 +305,12 @@ public class scanner {
         int estadoActual = 0; 
         String var = "";
         int valor = 0;
+        String value = "";
+     
+
         String var2 = "";
         String cad = "";
+        int counter = 0;
               int  flag = 0; 
               int flag1 = 0;
         if(variables == 1){
@@ -338,10 +343,13 @@ public class scanner {
                             var2 = var2 + caracter;
                             auxiliar.add(caracter);
                         } else if(Coma(caracter)){
-                            vars.add(this.Concaternar(auxiliar));
+                            variable.add(new Variables((this.Concaternar(auxiliar)), "", 0));
+                            counter ++;
+                            System.out.println("El contador de las variables va así --->"+counter);
                             auxiliar.clear();
                             estadoActual = 1;
                         } else if(DosPuntos(caracter)){
+                            
                             auxiliar.clear();
                             estadoActual = 2;
                         } else{
@@ -404,13 +412,21 @@ public class scanner {
                             estadoActual = 5;
                         } else if(caracterNumerico(caracter)){
                             estadoActual = 5;
-                            valor = valor+ caracter;
+                            value = value+ caracter;
+                            auxiliar.add(value);
+                            System.out.println("Este es el primer valor de auxiliar --->"+auxiliar.get(0));
+                               
                             //Agregar método para igualar los valores a la lista de variables
                         } else if(PuntoComa(caracter)){
+                            int entero = Integer.parseInt(value);
+                            System.out.println("Este es el número que debería de introducir ---> "+entero);
+                            for(int i = 0; i<contador; i++){
+                                variable.get(i).setvalor(entero);
+                            }
                             
-                            System.out.println(var.toUpperCase());
                             lista.add(var);
-                            vars.add(var);
+                            
+                            auxiliar.clear();
                            
                             estadoActual = 0;
                             
