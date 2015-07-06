@@ -8,6 +8,7 @@ import java.io.File;
 import java.net.URL;
 import javax.swing.JOptionPane;
 import javax.swing.*;
+
 /**
  *
  * @author Manuel
@@ -53,7 +54,7 @@ public class ventana extends javax.swing.JFrame {
 
         TextoAnalizar.setColumns(20);
         TextoAnalizar.setRows(5);
-        TextoAnalizar.setText("ENCABEZADO { Texto(“Arbol Genealogico, fam. Rosales Calel”); Negrita(ON); Cursiva(OFF); Subrayado(ON); } \nVARIABLES { X1,X2,X3,X4,X5: entero=39; VAR1: cadena=’hola’; Valor: entero; }\nARBOL { Persona:{ id:1 nombre:”Julio Rosales”; edad: 40; parentesco: padre; } Persona:{ id:2 nombre:”Maria Calel”; edad: 38; parentesco: madre; } Persona:{ id:3 nombre:”Juan Rosales Calel”; edad: 18; parentesco:hijo,hermano; } Persona:{ id:4 nombre:”Lucia Rosales Calel”; edad: 23; parentesco:hijo,hermano; } Relacion:{  hijos(1): 3,4; hijos(2):3,4; hermanos(3):4; hermanos(4):3; } }");
+        TextoAnalizar.setText("ENCABEZADO { Texto(“Arbol Genealogico, fam. Rosales Calel”); Negrita(ON); Cursiva(OFF); Subrayado(ON); } \nVARIABLES { X1,X2,X3,X4,X5: entero=39; VAR1: cadena=’hola’; Valor: entero; }\nARBOL { Persona:{ id:1; nombre:”Julio Rosales”; edad: 40; parentesco: padre; } Persona:{ id:2; nombre:”Maria Calel”; edad: 38; parentesco: madre; } Persona:{ id:3; nombre:”Juan Rosales Calel”; edad: 18; parentesco:hijo,hermano; } Persona:{ id:4; nombre:”Lucia Rosales Calel”; edad: 23; parentesco:hijo,hermano; } Relacion:{  hijos(1): 3,4; hijos(2):3,4; hermanos(3):4; hermanos(4):3; } }");
         jScrollPane1.setViewportView(TextoAnalizar);
 
         Analizar.setText("¡Analizar!");
@@ -118,16 +119,16 @@ public class ventana extends javax.swing.JFrame {
                         .addGap(199, 199, 199)
                         .addComponent(Analizar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
+                        .addGap(67, 67, 67)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(11, 11, 11)
                 .addComponent(Analizar)
                 .addContainerGap(30, Short.MAX_VALUE))
         );
@@ -174,7 +175,7 @@ public class ventana extends javax.swing.JFrame {
 
     private void GenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerarActionPerformed
         scanner s = new scanner();
-        s.GenerarPagina();
+        JOptionPane.showMessageDialog(null, "Este método ha sido anulado porque me vale verga el puto mundo perras :D.");
     }//GEN-LAST:event_GenerarActionPerformed
 
     /**

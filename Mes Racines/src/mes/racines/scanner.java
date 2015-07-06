@@ -10,6 +10,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import java.io.FileOutputStream;
 
 /**
  *
@@ -29,19 +32,22 @@ public class scanner {
     int encabezado = 0;
     int variables = 0;
     int contador = 0;
+    int counter = 0;
     int link = 0;
-    public ArrayList lista = new ArrayList();
-    public ArrayList vars = new ArrayList();
-    public ArrayList padre = new ArrayList();
-    public ArrayList madre = new ArrayList();
-    public ArrayList hermano = new ArrayList();
-    public ArrayList Errores = new ArrayList();
-    public ArrayList ID = new ArrayList();
-    public ArrayList Segmento = new ArrayList();
-    public ArrayList Personas = new ArrayList();
-    public ArrayList portada = new ArrayList();
-    public ArrayList caracteristica = new ArrayList();
+    public  ArrayList lista = new ArrayList <String>();
+    public ArrayList  vars = new ArrayList <String>();
+    public ArrayList  padre = new ArrayList <String>();
+    public ArrayList  madre = new ArrayList <String>();
+    public ArrayList  hermano = new ArrayList <String>();
+    public ArrayList  Errores = new ArrayList <String>();
+    public ArrayList ID = new ArrayList <String>();
+    public ArrayList Segmento = new ArrayList <String>();
+    public ArrayList  Personas = new ArrayList <String>();
+    public ArrayList  portada = new ArrayList <String>();
+    public ArrayList  caracteristica = new ArrayList <String>();
+    public ArrayList<Variables> variable = new ArrayList<Variables>();
     ListaPersona lp = new ListaPersona();
+    
    
     public scanner(){
     }
@@ -101,6 +107,13 @@ public class scanner {
                 case 6:
                     aceptacion = true;
                     JOptionPane.showMessageDialog(null, "Felicidades, la cadena es correcta y se han almacenado los datos correctamente :D.");
+                    this.GenerarPagina(lista);
+                    this.GenerarPDF();
+                    System.out.println(padre.get(0));
+                    System.out.println(madre.get(0));
+                    System.out.println(hermano.get(0));
+                    System.out.println(hermano.get(1));
+                    System.out.println(vars.get(0));
             }
         }
     }
@@ -111,7 +124,7 @@ public class scanner {
         String aux = "";
         String port = "";
         String xxx = "";
-        ArrayList auxiliar = new ArrayList();
+        ArrayList auxiliar = new ArrayList <String>();
         
         char caracter=' ';
         
@@ -158,7 +171,7 @@ public class scanner {
                          if((aux.toUpperCase().equals("Texto"))||(aux.toUpperCase().equals("TEXTO"))||(aux.toUpperCase().equals("texto"))){
                             System.out.println(aux.toUpperCase());
                              lista.add(this.Concaternar(auxiliar));
-                             System.out.println("La lista va así ---->"+lista.size());
+                             System.out.println("Esto es lo que tiene la puta lista --->"+lista.get(1));
                              auxiliar.clear();
                             aux = "";
                             
@@ -166,21 +179,21 @@ public class scanner {
                         } else if((aux.toUpperCase().equals("Negrita"))||(aux.toUpperCase().equals("NEGRITA"))||(aux.toUpperCase().equals("negrita"))){
                             System.out.println(aux.toUpperCase());
                             lista.add(this.Concaternar(auxiliar));
-                            System.out.println("La lista va así------>"+lista.size());
+                         
                             auxiliar.clear();
                             aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Cursiva"))||(aux.toUpperCase().equals("CURSIVA"))||(aux.toUpperCase().equals("cursiva"))){
                            System.out.println(aux.toUpperCase());
                             lista.add(this.Concaternar(auxiliar));
-                            System.out.println("La lista va así---->"+lista.size());
+                            
                             auxiliar.clear();
                             aux = "";
                             estadoActual = 14;
                         } else if((aux.toUpperCase().equals("Subrayado"))||(aux.toUpperCase().equals("SUBRAYADO"))||(aux.toUpperCase().equals("subrayado"))){
                             System.out.println(aux.toUpperCase());
                             lista.add(this.Concaternar(auxiliar));
-                            System.out.println("La lista va así--->"+lista.size());
+                            
                             auxiliar.clear();
                             aux = "";
                             estadoActual = 14;
@@ -195,7 +208,7 @@ public class scanner {
                     case 10:
                         if((caracterMinuscula(caracter))||(caracterMayuscula(caracter))){
                             estadoActual = 11;
-                            
+                            auxiliar.add(caracter);
                             port = port + caracter;
                         } else{
                             estadoActual = 10;
@@ -213,12 +226,17 @@ public class scanner {
                             estadoActual = 11;
                             port = port + caracter;
                             auxiliar.add(caracter);
+                        } else if(Comillas(caracter)){
+                            estadoActual = 12;
+                            portada.add(this.Concaternar(auxiliar));
+                            System.out.println("Así va la lista de portada --->"+portada.size());
+                            auxiliar.clear();
                         } else if(ParentesisA(caracter)){
                             estadoActual = 12;
                             portada.add(this.Concaternar(auxiliar));
                             System.out.println("Así va la lista de portada---> "+portada.size());
                             lista.add(this.Concaternar(auxiliar));
-                            System.out.println("Así va la lista---->"+lista.size());
+                           
                             auxiliar.clear();
                         } else{
                             estadoActual = 11;
@@ -260,7 +278,7 @@ public class scanner {
                             caracteristica.add(this.Concaternar(auxiliar));
                             System.out.println("Así va la lista de características --->"+caracteristica.size());
                             lista.add(this.Concaternar(auxiliar));
-                            System.out.println("Así va la lista ---->"+caracteristica.size());
+                            System.out.println("Esto es lo que tiene la puta lista --->"+lista.get(2));
                             auxiliar.clear();
                         } break;
                     case 17:
@@ -279,8 +297,8 @@ public class scanner {
     //Se han añadido las listas especializadas y se ha revisado que estén añadiéndose...
     public boolean Variables(String analisis){
         String aux = "";
-        ArrayList auxiliar = new ArrayList();
-        ArrayList auxiliar2 = new ArrayList();
+        ArrayList auxiliar = new ArrayList <String>();
+        ArrayList auxiliar2 = new ArrayList <String>();
         char caracter=' ';
         boolean aceptacion = false;
         int estadoActual = 0; 
@@ -437,7 +455,8 @@ public class scanner {
     //Ya se ha quitado el uppercase
     public boolean Arbol(String analisis){
         String aux = "";        
-        ArrayList auxiliar = new ArrayList();
+        ArrayList auxiliar = new ArrayList <String>();
+        ArrayList auxiliar2 = new ArrayList <String> ();
         char caracter;
         int counter = 0;
         boolean aceptacion = false;
@@ -522,7 +541,7 @@ public class scanner {
                             auxiliar.clear();
                             aux = "";
                         } else if((aux.toUpperCase().equals("Nombre"))||(aux.toUpperCase().equals("NOMBRE"))||(aux.toUpperCase().equals("nombre"))&&(flag1 == 0)){
-                            estadoActual = 7;
+                            estadoActual = 69;
                             lista.add(this.Concaternar(auxiliar));
                             System.out.println("Así va la lista --->"+lista.size());
                            ID.add(this.Concaternar(auxiliar));
@@ -580,27 +599,37 @@ public class scanner {
                      else{
                         estadoActual = 6;
                     } break;
-                
+                case 69:
+                     if(Comillas(caracter)){
+                        estadoActual = 7;
+                    } else{
+                         estadoActual = 69;
+                     } break;
                 case 7:
                     if((caracterMayuscula(caracter))||(caracterMinuscula(caracter))){
                         estadoActual = 8;
                         nombre = nombre + caracter;
-                        auxiliar.add(caracter);
-                    } else{
+                        auxiliar2.add(caracter);
+                    } 
+                    else{
                         estadoActual = 7;
                     } break;
                 case 8:
                     if((caracterMayuscula(caracter))||(caracterMinuscula(caracter))){
-                        estadoActual = 9;
+                        estadoActual = 8;
                         nombre = nombre + caracter;
-                        auxiliar.add(caracter);
+                        auxiliar2.add(caracter);
+                        for(int i = 0; i<auxiliar.size(); i++){
+                            System.out.println("Esta puta mierda tiene --->"+auxiliar2.get(i));
+                        }
                     } else if(Comillas(caracter)){
                         estadoActual = 9;
                          
                     } else if(Espacios(caracter)){
                         estadoActual = 8;
+                        auxiliar2.add(caracter);
                     }else{
-                        estadoActual = 9;
+                        estadoActual = 8;
                     } break;
                 case 9:
                     if(PuntoComa(caracter)){
@@ -645,22 +674,29 @@ public class scanner {
                         estadoActual = 13;
                         parentesco = parentesco + caracter;
                     }
+                    else if(Coma(caracter)){
+                        estadoActual = 13;
+                        parentesco = parentesco + caracter;
+                    }
                     else{
                         estadoActual = 13;
                     } break;
                 case 666:
                     if((parentesco.toUpperCase().equals("Padre"))||(parentesco.toUpperCase().equals("padre"))||(parentesco.toUpperCase().equals("PADRE"))){
+                        padre.add(this.Concaternar(auxiliar2));
                         
-                        padre.add(this.Concaternar(auxiliar));
-                        System.out.println("Así va la lista --->"+padre.size());
+                        auxiliar2.clear();
                         estadoActual = 14;
                     } else if ((parentesco.toUpperCase().equals("Madre"))||(parentesco.toUpperCase().equals("madre"))||(parentesco.toUpperCase().equals("MADRE"))){
-                        madre.add(this.Concaternar(auxiliar));
-                        System.out.println("Así va la lista --->"+madre.size());
+                        madre.add(this.Concaternar(auxiliar2));
+                        System.out.println("Así va la lista de madres--->"+madre.size());
+                        System.out.println(madre.get(0));
+                        auxiliar2.clear();
                         estadoActual = 14;
-                    } else if ((parentesco.toUpperCase().equals("Hijo"))||(parentesco.toUpperCase().equals("hijo"))||(parentesco.toUpperCase().equals("HIJO"))){
-                        hermano.add(this.Concaternar(auxiliar));
+                    } else if ((parentesco.toUpperCase().equals("Hijo,Hermano"))||(parentesco.toUpperCase().equals("hijo,hermano"))||(parentesco.toUpperCase().equals("HIJO,HERMANO"))){
+                        hermano.add(this.Concaternar(auxiliar2));
                         System.out.println("Así va la lista --->"+hermano.size());
+                        auxiliar2.clear();
                         estadoActual = 14;
                     } else{
                         Errores.add(nombre);
@@ -1012,7 +1048,7 @@ public boolean Verificar(int i){
     }
     
     
-    public void GenerarPagina(){
+    public void GenerarPagina(ArrayList lista){
         FileWriter filewriter = null;
         PrintWriter printwriter = null;
         
@@ -1034,7 +1070,7 @@ public boolean Verificar(int i){
             printwriter.println("<tr><td width = 100> No. Token </td> <td width = 100> Token </td> <td width = 100> Lexema </td> <td width = 100> Palabra Reservada </td> <td width = 100> Tipo </td></tr>");
             System.out.println(lista.size()+"");
             for(int i = 0; i<lista.size(); i++ ){
-               System.out.println("sdsdasdasdsad");
+              
                printwriter.println("<tr><td width = 100>"+ i +"</td> <td width = 100>"+ this.Retorno(i) + "</td> <td width = 100>" + lista.get(i) + "</td> <td width = 100> Token" + this.Verificar(i) + "</td></tr>");
             }
             printwriter.println("</table>");
@@ -1046,7 +1082,7 @@ public boolean Verificar(int i){
         }
     }
 
-public String Concaternar(ArrayList auxiliar){
+public String Concaternar(ArrayList  auxiliar){
     String cadena = "";
     for (int i = 0; i<auxiliar.size();i++){
         cadena = cadena + auxiliar.get(i);
@@ -1054,5 +1090,76 @@ public String Concaternar(ArrayList auxiliar){
     }
     return cadena;
 }
+
+public void GenerarPDF(){
+    Document arbolpdf = new Document();
+    FileOutputStream ficheropdf;
+    
+    try{
+        ficheropdf = new FileOutputStream("arbolgenealogico.pdf");
+        PdfWriter.getInstance(arbolpdf, ficheropdf).setInitialLeading(20);
+    }catch (Exception e){
+        System.out.println(e.toString());
+        
+    }
+    
+    try{
+        arbolpdf.open();
+        arbolpdf.add(new Paragraph("Árbol Genealógico de la Familia: "));
+        arbolpdf.close();
+    }catch (Exception e){
+        System.out.println(e.toString());
+    }
+}
+
+public void Generar(){
+        try{
+            String dotpath= "C:\\Program Files (x86)\\Graphviz 2.28\\bin\\dot.exe";
+            String fileInputPath = "grafo1.txt";
+            String fileOutputPath = "arbol.jpg";
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+            String[] cmd = new String[5];
+            cmd[0] = dotpath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+            
+            Runtime rt = Runtime.getRuntime();
+            rt.exec(cmd);
+            
+        } catch(Exception e){
+            e.printStackTrace();
+        } finally{
+            
+        }
+    }
+
+public void GenerarGrafo(String padre, String madre, String hijo, String hermano){
+        FileWriter fw = null;
+        PrintWriter pw = null;
+        try{
+            fw = new FileWriter("grafo1.txt");
+            pw = new PrintWriter(fw);
+            pw.println("diagraph G{ ");
+            pw.println(padre+";");
+            pw.println(madre+";");
+            pw.println(hijo+";");
+            pw.println(hermano+";");
+            pw.println(padre+" "+"->"+ hermano + " "+ ";");
+            pw.println(madre+" "+"->"+ hermano + " "+";");
+            pw.println(padre+" "+"->"+ hermano+" "+";");
+            pw.println(madre+" "+"->"+ hermano + " "+ ";");
+            pw.println(hermano+" "+"->"+ hermano +" "+ ";");
+            pw.println("}");
+            pw.close();
+            
+        } catch(Exception e){
+            
+        }
+    }
+
+
 }
 
